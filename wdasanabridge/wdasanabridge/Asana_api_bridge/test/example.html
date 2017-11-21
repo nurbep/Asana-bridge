@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="jquery-1.9.1.min.js"></script>
+    <script src="jquery-1.10.2.min.map"></script>
+    <title>Test</title>
+</head>
+<body>
+    <label>Get Asana info:</label><br>
+    <label>Asana key</label><input style="margin-left: 10px;" id="asanakey" type="text"><button style="margin-left: 10px;" id="connect">Connect client</button><br><br>
+    <button id="workspaces">Get workspaces</button><br><br>
+    <button id="allteams">Get all teams</button><br><br>
+    <label>Workspace ID</label><input style="margin-left: 10px;" id="workspaceid" type="text"><button style="margin-left: 10px;" id="projects">Get projects</button><br><br>
+    <label>Workspace ID</label><input style="margin-left: 10px;" id="workspaceteams" type="text"><button style="margin-left: 10px;" id="getteams">Get teams from workspace</button><br><br>
+    <label>Project ID</label><input style="margin-left: 10px;" id="projectid"><button style="margin-left: 10px;" id="tasks">Get tasks</button><br><br>
+    <label>Task ID</label><input style="margin-left: 10px;" id="taskid" type="text"><button style="margin-left: 10px;" id="getTask">Get task</button><br><br>
+
+    <label>Move a task:</label><br><br>
+    <label>Task ID</label><input style="margin-left: 10px;" id="task" type="text">
+    <label>Destination workspace ID</label><input style="margin-left: 10px;" id="workspaceDest" type="text">
+    <label>Destination project ID</label><input style="margin-left: 10px;" id="projectDest" type="text">
+    <button id="move">Move!</button><br><br>
+
+    <label>Create a task:</label><br><br>
+    <label>Workspace</label><input style="margin-left: 10px;" id="newTaskWorkspace" type="text">
+    <label>Project</label><input style="margin-left: 10px;" id="newTaskProject" type="text"><br><br>
+    <label>Task name</label><input style="margin-left: 10px;" id="newTaskName" type="text">
+    <label>Task description</label><input style="margin-left: 10px;" id="newTaskDescription" type="text"><button style="margin-left: 10px;" id="create">Create!</button>
+    <div id="results"></div>
+</body>
+
+<script>
+    //57AsAE5I.0ZAC5c1JI0Dov8hwV2mF5WV
+    var key;
+    var url = "http://127.0.0.1:9000";//
+
+    $("#getteams").click(function(){
+        var workspaceID = $("#workspaceteams").val();
+        $.ajax({
+            url: url+"/teams",
+            type: "GET",
+            contentType: "application/json",
+            data: {"key" : key, "workspaceID" : workspaceID},
+            success: function(stuff) {
+                handleStuff(stuff);
+            },
+            error: function(err) {
+                handleStuff(err);
+            }
+        })
+    });
+
+    $("#allteams").click(function(){
+        $.ajax({
+            url: url+"/workspaces-teams",
+            type: "GET",
+            contentType: "application/json",
+            data: {"key" : key},
+            success: function(stuff) {
+                handleStuff(stuff);
+            },
+            error: function(err) {
+                handleStuff(err);
+            }
+        })
+    });
+
+    $("#getTask").click(function(){
+        var task = $("#taskid").val();
+        $.ajax({
+            url: url+"/task",
+            type: "GET",
+            contentType: "application/json",
+            data:  { "key" : key, "taskID" : task },
+            success: function(stuff) {
+                handleStuff(stuff);
+            },
+            error: function(err) {
+                handleStuff(err);
+            }
+        });
+    });
+
+    $("#create").click(function(){
+        var workspace = $("#newTaskWorkspace").val();
+        var project = $("#newTaskProject").val();
+        var taskName = $("#newTaskName").val();
+        var taskDescription = $("#newTaskDescription").val();
+        $.ajax({
+            url: url+"/createTask",
+            type: "GET",
+            contentType: "application/json",
+            data:  { "key" : key, "workspaceDestination" : workspace, "projectDestination" : project, "taskname" : taskName, "notes" : taskDescription },
+            success: function(stuff) {
+                handleStuff(stuff);
+            },
+            error: function(err) {
+                handleStuff(err);
+            }
+        });
+    });
+
+    $("#move").click(function(){
+        var task = $("#task").val();
+        var workspace = $("#workspaceDest").val();
+        var project = $("#projectDest").val();
+        $.ajax({
+            url: url+"/moveTask",
+            type: "GET",
+            contentType: 'application/json',
+            data: { "key" : key, "task" : task, "workspaceDestination" : workspace, "projectDestination" : project },
+            success: function(stuff) {
+                handleStuff(stuff);
+            },
+            error: function(err) {
+                handleStuff(err);
+            }
+        });
+    });
+
+    $("#connect").click(function(){
+        key = $("#asanakey").val();
+        $.ajax({
+            url: url+"/connectClient",
+            type: "GET",
+            contentType: 'application/json',
+            data: { "key" : key },
+            //dataType: 'json',
+            success: function(stuff) {
+                handleStuff(stuff);
+            },
+            error: function(err) {
+                handleStuff(err);
+            }
+        });
+    });
+
+    $("#workspaces").click(function(){
+        $.ajax({
+            url: url+"/workspaces",
+            type: "GET",
+            contentType: 'application/json',
+            data: { "key" : key },
+            //dataType: 'json',
+            success: function(stuff) {
+                handleStuff(stuff);
+            },
+            error: function(err) {
+                handleStuff(err);
+            }
+        });
+    });
+
+    $("#projects").click(function(){
+        var workspace = $("#workspaceid").val();
+        $.ajax({
+            url: url+"/projects",
+            type: "GET",
+            contentType: 'application/json',
+            data: { "key" : key, "workspaceID" : workspace },
+            //dataType: 'json',
+            success: function(stuff) {
+                handleStuff(stuff);
+            },
+            error: function(err) {
+                handleStuff(err);
+            }
+        });
+    });
+
+    $("#tasks").click(function(){
+        var project = $("#projectid").val();
+        $.ajax({
+            url: url+"/tasks",
+            type: "GET",
+            contentType: 'application/json',
+            data: { "key" : key, "projectID" : project },
+            //dataType: 'json',
+            success: function(stuff) {
+                handleStuff(stuff);
+            },
+            error: function(err) {
+                handleStuff(err);
+            }
+        });
+    });
+
+    function handleStuff(params){
+        console.log(params);
+        $("#results").append("<p>Result = "+JSON.stringify(params)+"</p>");
+    }
+</script>
+</html>
