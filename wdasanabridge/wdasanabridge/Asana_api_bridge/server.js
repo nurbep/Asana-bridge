@@ -1,6 +1,4 @@
-/**
- * Created by krismaini on 08/09/14.
- */
+
 var asana = require('../Asana_api_bridge/asanaConnect/asana'),
     http = require('http'),
     express = require("express"),
