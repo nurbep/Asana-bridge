@@ -1,9 +1,4 @@
-/*
- * client.js: Client for the RESTful provisioner service.
- *
- * (C) 2010, Nodejitsu Inc.
- *
- */
+
 
 var events = require('events'),
     qs = require('querystring'),
