@@ -1,9 +1,3 @@
-/*
- * users.js: Methods for the users resource.
- *
- * (C) 2012 Charlie Robbins.
- *
- */
 
 var async = require('utile').async;
 
