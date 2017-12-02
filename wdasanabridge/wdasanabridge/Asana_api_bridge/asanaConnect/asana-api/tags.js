@@ -1,9 +1,4 @@
-/*
- * tags.js: Methods for the tags resource.
- *
- * (C) 2012 Charlie Robbins.
- *
- */
+
 
 var Tags = exports.Tags = function (client) {
   this.client = client;
