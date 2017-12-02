@@ -1,9 +1,4 @@
-/*
- * workspaces.js: Methods for the workspaces resource.
- *
- * (C) 2012 Charlie Robbins.
- *
- */
+
 
 var Workspaces = exports.Workspaces = function (client) {
   this.client = client;
